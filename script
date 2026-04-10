@@ -1,0 +1,94 @@
+// State Management
+let currentView = 'dashboard';
+let appData = {
+    dashboard: [{id: 1, v1: "Alex Rivers", v2: "$5,000", v3: "5%"}, {id: 2, v1: "Sarah Chen", v2: "$12,000", v3: "4.2%"}],
+    clients: [{id: 3, v1: "Julian Casablancas", v2: "740", v3: "Jan 2026"}],
+    schemes: [{id: 4, v1: "SME Starter", v2: "4.5%", v3: "12 Months"}],
+    transactions: [{id: 5, v1: "TXN-9920", v2: "$450.00", v3: "Repayment"}]
+};
+
+// 1. Navigation Logic
+function switchView(viewId) {
+    currentView = viewId;
+    // Update Sidebar UI
+    document.querySelectorAll('.nav-links li').forEach(li => {
+        li.classList.toggle('active', li.innerText.toLowerCase().includes(viewId.slice(0,3)));
+    });
+    // Update Content Visibility
+    document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
+    document.getElementById(`${viewId}-view`).classList.add('active');
+    // Update Header
+    document.getElementById('page-title').innerText = viewId.charAt(0).toUpperCase() + viewId.slice(1);
+    
+    renderTable();
+}
+
+// 2. CRUD Logic (Add/Remove)
+function openModal() {
+    document.getElementById('modal-overlay').style.display = 'flex';
+    document.getElementById('modal-header').innerText = `Add to ${currentView}`;
+}
+
+function closeModal() {
+    document.getElementById('modal-overlay').style.display = 'none';
+}
+
+function saveEntry() {
+    const v1 = document.getElementById('input-1').value;
+    const v2 = document.getElementById('input-2').value;
+    const v3 = document.getElementById('input-3').value;
+
+    if(!v1 || !v2) return alert("Please fill required fields");
+
+    const newEntry = { id: Date.now(), v1, v2, v3 };
+    appData[currentView].push(newEntry);
+    
+    renderTable();
+    closeModal();
+    // Clear inputs
+    document.querySelectorAll('.input-group input').forEach(i => i.value = '');
+}
+
+function deleteEntry(id) {
+    appData[currentView] = appData[currentView].filter(item => item.id !== id);
+    renderTable();
+}
+
+function renderTable() {
+    const tbody = document.querySelector(`#${currentView}-table tbody`);
+    if(!tbody) return;
+
+    tbody.innerHTML = appData[currentView].map(item => `
+        <tr>
+            <td>${item.v1}</td>
+            <td><b>${item.v2}</b></td>
+            <td>${item.v3}</td>
+            <td>
+                <span class="action-btn" style="padding: 5px 10px; font-size: 10px;">Update</span>
+                <span class="delete-btn" onclick="deleteEntry(${item.id})">Delete</span>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// 3. Eye-Candy: Count-Up Animation
+function animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const val = Math.floor(progress * (end - start) + start);
+        obj.innerHTML = id === 'total-disbursed' ? `$${val.toLocaleString()}` : (id === 'recovery-rate' ? `${val}%` : val);
+        if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+}
+
+// Initialize
+document.addEventListener("DOMContentLoaded", () => {
+    animateValue("total-disbursed", 0, 1254300, 1500);
+    animateValue("active-borrowers", 0, 842, 1500);
+    animateValue("recovery-rate", 0, 98, 1500);
+    renderTable();
+});
