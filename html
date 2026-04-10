@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus | Microfinance Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    
+    <nav class="sidebar">
+        <div class="logo">NEXUS</div>
+        <ul class="nav-links">
+            <li class="active" onclick="switchView('dashboard')">Dashboard</li>
+            <li onclick="switchView('clients')">Clients</li>
+            <li onclick="switchView('schemes')">Loan Schemes</li>
+            <li onclick="switchView('transactions')">Transactions</li>
+            <li onclick="switchView('reports')">Reports</li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header>
+            <div class="welcome">
+                <h1 id="page-title">Financial Overview</h1>
+                <p id="page-subtitle">Microfinance Management System</p>
+            </div>
+            <div class="profile-zone">
+                <button class="action-btn" id="main-action-btn" onclick="openModal()">+ New Entry</button>
+            </div>
+        </header>
+
+        <div id="dashboard-view" class="content-view active">
+            <section class="stats-grid">
+                <div class="card stat-card">
+                    <span>Total Disbursed</span>
+                    <h2 id="total-disbursed">$0</h2>
+                    <div class="progress-bar"><div class="fill" style="width: 75%;"></div></div>
+                </div>
+                <div class="card stat-card">
+                    <span>Active Borrowers</span>
+                    <h2 id="active-borrowers">0</h2>
+                    <div class="progress-bar"><div class="fill" style="width: 45%;"></div></div>
+                </div>
+                <div class="card stat-card">
+                    <span>Recovery Rate</span>
+                    <h2 id="recovery-rate">0%</h2>
+                    <div class="progress-bar"><div class="fill" style="width: 92%;"></div></div>
+                </div>
+            </section>
+            <div class="card">
+                <h3>Recent Active Loans</h3>
+                <table id="dashboard-table">
+                    <thead><tr><th>Client</th><th>Amount</th><th>Interest</th><th>Actions</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="clients-view" class="content-view">
+            <div class="card">
+                <h3>Client Directory</h3>
+                <table id="clients-table">
+                    <thead><tr><th>Name</th><th>Credit Score</th><th>Join Date</th><th>Actions</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="schemes-view" class="content-view">
+            <div class="card"><h3>Loan Schemes</h3><table id="schemes-table"><thead><tr><th>Scheme Name</th><th>Rate</th><th>Period</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+        <div id="transactions-view" class="content-view">
+            <div class="card"><h3>Transactions</h3><table id="transactions-table"><thead><tr><th>Reference</th><th>Amount</th><th>Type</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+        <div id="reports-view" class="content-view">
+            <div class="card"><h3>System Reports</h3><p>Data visualization and export tools are ready.</p></div>
+        </div>
+    </main>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="card modal-content">
+            <h2 id="modal-header">Add New Record</h2>
+            <div class="input-group">
+                <input type="text" id="input-1" placeholder="Primary Detail (e.g. Name)">
+                <input type="text" id="input-2" placeholder="Secondary Detail (e.g. Amount)">
+                <input type="text" id="input-3" placeholder="Additional Info (e.g. Rate/Date)">
+            </div>
+            <div class="modal-actions">
+                <button class="action-btn secondary" onclick="closeModal()">Cancel</button>
+                <button class="action-btn" onclick="saveEntry()">Save Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
